@@ -1,0 +1,88 @@
+\relax 
+\providecommand \babel@aux [2]{\global \let \babel@toc \@gobbletwo }
+\@nameuse{bbl@beforestart}
+\catcode `"\active 
+\catcode `<\active 
+\catcode `>\active 
+\@nameuse{es@quoting}
+\catcode `'\active 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\babel@aux{spanish}{}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Datos del Proyecto y Participación del Equipo}{3}{section.1}\protected@file@percent }
+\newlabel{sec:participacion}{{1}{3}{Datos del Proyecto y Participación del Equipo}{section.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Participación del equipo en la Entrega Parcial.}}{3}{table.caption.1}\protected@file@percent }
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{tab:participacion}{{1}{3}{Participación del equipo en la Entrega Parcial}{table.caption.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Introducción}{3}{section.2}\protected@file@percent }
+\citation{strauss-pde}
+\citation{leveque-fdm}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Descripción del Problema y del Algoritmo}{4}{section.3}\protected@file@percent }
+\newlabel{sec:problema}{{3}{4}{Descripción del Problema y del Algoritmo}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}La ecuación de calor}{4}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Discretización: diferencias finitas y stencil de 5 puntos}{4}{subsection.3.2}\protected@file@percent }
+\citation{leveque-fdm}
+\citation{courant1928}
+\citation{vnsa-wiki}
+\citation{gropp-mpi}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Esquema explícito (Jacobi) y estabilidad CFL}{5}{subsection.3.3}\protected@file@percent }
+\newlabel{sec:cfl}{{3.3}{5}{Esquema explícito (Jacobi) y estabilidad CFL}{subsection.3.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}El problema concreto y la configuración experimental}{5}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Algoritmo paralelo: descomposición de dominio MPI y halos}{5}{subsection.3.5}\protected@file@percent }
+\newlabel{sec:algoritmo}{{3.5}{5}{Algoritmo paralelo: descomposición de dominio MPI y halos}{subsection.3.5}{}}
+\newlabel{lst:loop}{{1}{6}{Núcleo del bucle de iteración (\texttt {src/heat-mpi-big.c}, líneas 239--297, abreviado)}{lstlisting.1}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}{\ignorespaces Núcleo del bucle de iteración (\texttt  {src/heat-mpi-big.c}, líneas 239--297, abreviado).}}{6}{lstlisting.1}\protected@file@percent }
+\citation{jaja1992}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Método: Modelo PRAM y Complejidad Teórica}{7}{section.4}\protected@file@percent }
+\newlabel{sec:metodo}{{4}{7}{Método: Modelo PRAM y Complejidad Teórica}{section.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}El modelo PRAM y por qué aplica aquí}{7}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}El algoritmo como programa PRAM}{7}{subsection.4.2}\protected@file@percent }
+\newlabel{lst:pram}{{2}{8}{Algoritmo PRAM de una iteración del solver}{lstlisting.2}{}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}{\ignorespaces Algoritmo PRAM de una iteración del solver.}}{8}{lstlisting.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}DAG y análisis de costos por iteración}{8}{subsection.4.3}\protected@file@percent }
+\newlabel{sec:dag}{{4.3}{8}{DAG y análisis de costos por iteración}{subsection.4.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces DAG de una iteración temporal. El bloque punteado se repite $T=\Theta (n^2)$ veces; el ciclo completo es la cadena de dependencias secuencial.}}{9}{figure.caption.2}\protected@file@percent }
+\newlabel{fig:dag}{{1}{9}{DAG de una iteración temporal. El bloque punteado se repite $T=\Theta (n^2)$ veces; el ciclo completo es la cadena de dependencias secuencial}{figure.caption.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Costo PRAM por fase y por iteración (sin comunicación).}}{9}{table.caption.3}\protected@file@percent }
+\newlabel{tab:dag-costos}{{2}{9}{Costo PRAM por fase y por iteración (sin comunicación)}{table.caption.3}{}}
+\citation{mit18300}
+\citation{vnsa-wiki}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Número de iteraciones hasta converger: $T=\Theta (n^2)$}{10}{subsection.4.4}\protected@file@percent }
+\newlabel{sec:Tn2}{{4.4}{10}{Número de iteraciones hasta converger: \texorpdfstring {$T=\Theta (n^2)$}{T=Theta(n2)}}{subsection.4.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Trabajo total, profundidad y paralelismo disponible}{10}{subsection.4.5}\protected@file@percent }
+\newlabel{sec:brent}{{4.5}{10}{Trabajo total, profundidad y paralelismo disponible}{subsection.4.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Tiempo, \textit  {speedup} y eficiencia en el modelo PRAM}{11}{subsection.4.6}\protected@file@percent }
+\newlabel{sec:pram-metricas}{{4.6}{11}{Tiempo, \textit {speedup} y eficiencia en el modelo PRAM}{subsection.4.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Del PRAM a la realidad: memoria distribuida y halos (MPI)}{11}{subsection.4.7}\protected@file@percent }
+\newlabel{sec:bsp}{{4.7}{11}{Del PRAM a la realidad: memoria distribuida y halos (MPI)}{subsection.4.7}{}}
+\citation{nmsu-hpc}
+\citation{lammps}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Costo por iteración de un proceso (cómputo + comunicación).}}{12}{table.caption.4}\protected@file@percent }
+\newlabel{tab:bsp-costos}{{3}{12}{Costo por iteración de un proceso (cómputo + comunicación)}{table.caption.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Número óptimo de procesos y escalabilidad débil}{12}{subsection.4.8}\protected@file@percent }
+\newlabel{sec:isoeficiencia}{{4.8}{12}{Número óptimo de procesos y escalabilidad débil}{subsection.4.8}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Mapa de derivación de la Sección~\ref {sec:metodo}: cada fórmula nueva se obtiene de la anterior por conteo directo, un resultado citado, o una multiplicación/sustitución algebraica.}}{13}{table.caption.5}\protected@file@percent }
+\newlabel{tab:mapa-derivacion}{{4}{13}{Mapa de derivación de la Sección~\ref {sec:metodo}: cada fórmula nueva se obtiene de la anterior por conteo directo, un resultado citado, o una multiplicación/sustitución algebraica}{table.caption.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.9}Resumen de complejidades}{13}{subsection.4.9}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Resumen de complejidades teóricas: modelo PRAM puro vs. extensión a memoria distribuida (MPI).}}{13}{table.caption.6}\protected@file@percent }
+\newlabel{tab:resumen-pram}{{5}{13}{Resumen de complejidades teóricas: modelo PRAM puro vs. extensión a memoria distribuida (MPI)}{table.caption.6}{}}
+\bibcite{strauss-pde}{1}
+\bibcite{leveque-fdm}{2}
+\bibcite{courant1928}{3}
+\bibcite{gropp-mpi}{4}
+\bibcite{jaja1992}{5}
+\bibcite{mit18300}{6}
+\bibcite{vnsa-wiki}{7}
+\bibcite{grama2003}{8}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Metodología Experimental y Métricas}{14}{section.5}\protected@file@percent }
+\newlabel{sec:metodo-experimental}{{5}{14}{Metodología Experimental y Métricas}{section.5}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Definición de las métricas}{14}{subsection.5.1}\protected@file@percent }
+\newlabel{sec:metricas}{{5.1}{14}{Definición de las métricas}{subsection.5.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Bibliografía y Uso de IA}{14}{section.6}\protected@file@percent }
+\newlabel{sec:biblio}{{6}{14}{Bibliografía y Uso de IA}{section.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Referencias}{14}{subsection.6.1}\protected@file@percent }
+\bibcite{nmsu-hpc}{9}
+\bibcite{lammps}{10}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Uso de Inteligencia Artificial}{15}{subsection.6.2}\protected@file@percent }
+\gdef \@abspage@last{15}

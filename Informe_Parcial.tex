@@ -1,0 +1,1026 @@
+\documentclass[11pt,a4paper]{article}
+
+% =================== GEOMETRÍA Y FORMATO ===================
+\usepackage{geometry}
+\geometry{a4paper, top=2.5cm, bottom=2.5cm, left=2cm, right=2cm}
+\textheight=21cm
+\textwidth=17cm
+\topmargin=-1cm
+\oddsidemargin=0cm
+\parindent=0mm
+
+% =================== IDIOMA Y FUENTES ===================
+\usepackage[spanish,activeacute]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% =================== MATEMÁTICAS ===================
+\usepackage{amsmath, amssymb, amsthm, latexsym, cancel, siunitx}
+
+% =================== GRÁFICOS Y FIGURAS ===================
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, decorations.pathreplacing, backgrounds, fit, calc, shadows, shapes.symbols}
+\usepackage{float}
+\usepackage[justification=centering]{caption}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% =================== TABLAS ===================
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{tabularx}
+
+% =================== LISTADOS DE CÓDIGO ===================
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Código}
+
+\lstdefinestyle{cppstyle}{
+	backgroundcolor=\color{gray!5},
+	basicstyle=\ttfamily\footnotesize,
+	breaklines=true,
+	frame=single,
+	framerule=0.5pt,
+	showstringspaces=false,
+	commentstyle=\color{gray!70}\itshape,
+	stringstyle=\color{teal!90!black},
+	keywordstyle=\color{blue!70!black}\bfseries,
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	numbersep=8pt,
+	tabsize=4,
+	language=C++
+}
+
+\lstset{
+	inputencoding=utf8,
+	extendedchars=true,
+	literate=
+	{á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+	{Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+	{ñ}{{\~n}}1 {Ñ}{{\~N}}1
+}
+
+% =================== HIPERREFERENCIAS ===================
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	urlcolor=blue,
+	linkcolor=black,
+	citecolor=green,
+	pdfpagemode=UseOutlines,
+	breaklinks=true
+}
+
+% =================== OTROS ===================
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\titlespacing*{\subsubsection}{0pt}{0.7\baselineskip}{0.2\baselineskip}
+\usepackage{enumitem}
+\usepackage{textcomp}
+\usepackage{verbatim}
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+
+% =================== DEFINICIONES Y AMBIENTES ===================
+\renewcommand{\contentsname}{\ \ Índice}
+\renewcommand{\figurename}{Figura}
+\renewcommand{\tablename}{Tabla}
+
+% =================== COLORES PERSONALIZADOS ===================
+\definecolor{azulutec}{RGB}{0, 102, 204}
+\definecolor{verdeutec}{RGB}{0, 153, 76}
+\definecolor{naranjawarning}{RGB}{255, 153, 51}
+\definecolor{rojodanger}{RGB}{220, 53, 69}
+
+% =================== DATOS DEL DOCUMENTO ===================
+\author{Grupo N\textdegree 1 -- AHPC}
+\renewcommand{\footrulewidth}{0.1pt}
+
+% ========== PORTADA ==========
+\begin{document}
+	\thispagestyle{empty}
+	\centerline{{\bfseries \Large UNIVERSIDAD DE INGENIERÍA Y TECNOLOGÍA}}
+	\bigskip
+	\begin{center}
+		\includegraphics[scale=0.8]{img/utec.png}\\
+		\vspace{1.5cm}
+		{\large\textbf{Facultad de Computación - Escuela de Postgrado}}\\
+		\smallskip
+		{\large\textbf{Maestría en Ciencia de Datos e IA}}\\
+		\vspace{1cm}
+		{\textbf{\LARGE Proyecto Final -- Entrega Parcial}}\\
+		{\textbf{\Large Análisis de Performance de un Solver MPI}}\\
+		{\textbf{\Large para la Ecuación de Calor en 2D}}\\
+		\vspace{0.8cm}
+
+		\textbf{Grupo N°1}\\
+		\vspace{0.5cm}
+		\textbf{Alumnos:}\\[0.3cm]
+		\Large Ángeles Chavez, Hugo\\
+		\Large Cajusol Mio, Christian Edgardo\\
+		\Large Meza Medel, Francisco Ernesto\\
+		\Large Yurivilca Gomez, Jhomar David\\[0.5cm]
+
+		\textbf{Docente:} Dr. Jose Antonio, Fiestas Iquira
+	\end{center}
+	\vspace{1cm}
+	\begin{center}
+		Applied High Performance Computing - AHPC\\
+		Ciclo - IV
+	\end{center}
+	\vspace{1cm}
+	\enlargethispage{4\baselineskip}
+	\centerline{\textbf{NO PUBLICABLE}}
+	\centerline{2026}
+	\centerline{BARRANCO-PERÚ}
+
+	% ========== SEGUNDA PÁGINA ==========
+	\newpage
+	\tableofcontents
+	\newpage
+
+	% ========== TERCERA PÁGINA ==========
+	\pagestyle{fancy}
+	\fancyhf{}
+	\fancyhead{}
+	\fancyfoot{}
+	\setlength{\headheight}{25pt}
+	\setlength{\headsep}{30pt}
+	\setlength{\footskip}{80pt}
+
+	\fancyhead[L]{\includegraphics[height=1.2cm]{img/utec_postgrado.png}}
+	\fancyhead[R]{%
+		\begin{minipage}[b]{6.5cm}
+			\raggedleft
+			\textbf{UTEC}\\
+			Maestría en Ciencia de Datos \& IA\\
+			\textbf{Applied High Performance Computing - AHPC}
+	\end{minipage}}
+
+	\lfoot{\begin{minipage}[b]{4cm}\raggedright\textbf{Ecuación de Calor}\\\textbf{Solver MPI}\end{minipage}}
+	\cfoot{\textbf{Entrega Parcial -- Proyecto Final}}
+	\rfoot{\textbf{Página \thepage}}
+
+	\renewcommand{\headrulewidth}{0.6pt}
+	\renewcommand{\footrulewidth}{0.6pt}
+
+	% ========== SECCIÓN 1 ==========
+	\section{Datos del Proyecto y Participación del Equipo}
+	\label{sec:participacion}
+
+	\subsection*{Datos generales}
+
+	\begin{center}
+	\begin{tabular}{ll}
+		\toprule
+		\textbf{Campo} & \textbf{Valor} \\
+		\midrule
+		Curso & CS8084 -- Applied High Performance Computing (AHPC) \\
+		Ciclo & IV -- Maestría en Ciencia de Datos e IA, Posgrado UTEC 2026-I \\
+		Docente & Dr. Jose Antonio Fiestas Iquira \\
+		Tema elegido & Opción 4 del enunciado: \textit{Ecuación de Calor} \\
+		Repositorio & \url{https://github.com/hugoangeles0810/ahpc-heat-equation} \\
+		Clúster de cómputo & Khipu (UTEC), cuenta \texttt{postgrado}, nodos Xeon Gold 6130 \\
+		Entrega & Entrega Parcial (sección 7.1 del enunciado del proyecto) \\
+		\bottomrule
+	\end{tabular}
+	\end{center}
+
+	\subsection*{Integrantes y porcentaje de participación}
+
+	La Tabla~\ref{tab:participacion} resume el porcentaje de participación de cada
+	integrante en el proyecto. El reparto de trabajo combina desarrollo de
+	código/experimentación en el clúster, redacción del marco teórico (PRAM y
+	complejidad) y consolidación del informe.
+
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{lc}
+		\toprule
+		\textbf{Integrante} & \textbf{\% participación} \\
+		\midrule
+		Hugo Ángeles Chávez & 100\% \\
+		\addlinespace
+		Christian Cajusol Mio & 100\% \\
+		\addlinespace
+		Francisco Meza Medel & 100\% \\
+		\addlinespace
+		Jhomar Yurivilca Gómez & 100\% \\
+		\bottomrule
+	\end{tabular}
+	\caption{Participación del equipo en la Entrega Parcial.}
+	\label{tab:participacion}
+	\end{table}
+
+	% ========== SECCIÓN 2 ==========
+	\section{Introducción}
+
+	El cómputo de alto desempeño (\textit{High Performance Computing}, HPC) tiene en
+	la solución numérica de ecuaciones diferenciales parciales (EDP) uno de sus casos
+	de uso más representativos: simulaciones de clima, mecánica de fluidos,
+	electromagnetismo y transferencia de calor se reducen, en la práctica, a resolver
+	mallas con millones de incógnitas mediante esquemas iterativos que se repiten
+	miles de veces hasta alcanzar convergencia. Este tipo de algoritmos son
+	\textbf{intensivos en cómputo y en comunicación}, y son el escenario natural para
+	aplicar el modelo de paralelismo PRAM y el modelo de costos de comunicación,
+	junto con las herramientas (MPI, SLURM) estudiadas en el curso.
+
+	De las opciones propuestas en el enunciado del proyecto, el grupo eligió la
+	\textbf{Opción 4 -- Ecuación de Calor}: analizar el desempeño de un programa que
+	resuelve la ecuación de calor 2D en paralelo mediante el método de diferencias
+	finitas con un esquema explícito (Jacobi). El proyecto contempla:
+	\enlargethispage{3 \baselineskip}
+	\begin{enumerate}
+		\item Una versión \textbf{serial} de referencia (\texttt{src/heat-big.c}),
+		con el mismo método de Jacobi pero sin MPI. Esta versión se incluye solo
+		como referencia del algoritmo: \textbf{no} es la que se usa para calcular el
+		\textit{speedup}. Para eso se usa la propia versión \textbf{MPI ejecutada con
+		$p=1$ proceso} como caso base $T_1$, de modo que
+		$S(p)=T(n,1)/T(n,p)$ siempre compara el mismo programa, cambiando solo el
+		número de procesos.
+		
+		\item Una versión \textbf{paralela con MPI} (\texttt{src/heat-mpi-big.c}) que
+		descompone el dominio 2D entre $p$ procesos mediante un comunicador
+		cartesiano, intercambia \textit{halos} (celdas fantasma) en cada iteración y
+		evalúa el criterio de convergencia global mediante \texttt{MPI\_Allreduce}.
+		\item Infraestructura de \textbf{benchmarking} sobre el clúster Khipu (UTEC)
+		mediante SLURM, que ejecuta un barrido de tamaños de malla
+		$n \in \{128, 256, 512, 1024\}$ y número de procesos
+		$p \in \{1, 2, 4, 8, 16\}$.
+		\item Un \textbf{análisis de performance} (\texttt{analysis/plot\_performance.py})
+		que procesa los resultados y genera las gráficas de tiempo, \textit{speedup},
+		eficiencia e iteraciones hasta convergencia.
+	\end{enumerate}
+
+	El proyecto contempla tres objetivos:
+
+	\begin{itemize}
+		\item[\textbf{(a)}] Elaborar el modelo \textbf{PRAM} del algoritmo, determinar
+		su complejidad teórica y definir las métricas de \textit{speedup} y eficiencia
+		(Secciones~\ref{sec:metodo} y \ref{sec:metricas}).
+		\item[\textbf{(b)}] Ejecutar mediciones de tiempo para distinto número de
+		procesos y tamaño de problema, y compararlas con la complejidad teórica.
+		\item[\textbf{(c)}] Desarrollar un software de análisis de performance que
+		genere la representación gráfica de las métricas y permita concluir sobre la
+		escalabilidad.
+	\end{itemize}
+
+	Este \textbf{informe parcial} cubre el objetivo (a) -- modelo PRAM y definición
+	de métricas -- junto con la descripción del problema/algoritmo y la
+	bibliografía utilizada. La infraestructura de \textit{benchmarking} en Khipu
+	(objetivo b) y el software de análisis (objetivo c) ya están implementados en
+	el repositorio; sus resultados y la discusión correspondiente se presentarán en
+	el informe final.
+
+	El resto del documento se organiza así: la Sección~\ref{sec:problema} describe el
+	problema físico, su discretización y el algoritmo paralelo; la
+	Sección~\ref{sec:metodo} desarrolla el modelo PRAM, el análisis
+	trabajo--profundidad y su extensión a memoria distribuida; la
+	Sección~\ref{sec:metodo-experimental} define las métricas de \textit{speedup} y
+	eficiencia que se evaluarán con datos reales; y la Sección~\ref{sec:biblio}
+	documenta las fuentes externas utilizadas (incluyendo IA).
+
+	% ========== SECCIÓN 3 ==========
+	\section{Descripción del Problema y del Algoritmo}
+	\label{sec:problema}
+
+	\subsection{La ecuación de calor}
+	\enlargethispage{4 \baselineskip}
+	La ecuación de calor describe cómo se redistribuye la temperatura $u(x,y,t)$ en
+	un dominio a lo largo del tiempo \cite{strauss-pde}. En dos dimensiones, con
+	difusividad $\alpha = 1$:
+
+	\[
+	\frac{\partial u}{\partial t} = \alpha \left( \frac{\partial^2 u}{\partial x^2}
+	+ \frac{\partial^2 u}{\partial y^2} \right) = \alpha\,\nabla^2 u .
+	\]
+	
+	Intuitivamente, el calor fluye de lo caliente a lo frío y la rapidez de cambio de un punto depende de cuánto difiere de sus vecinos (curvatura, $\nabla^2 u$).
+	Cuando el sistema deja de cambiar ($\partial u/\partial t = 0$), se llega al
+	\textbf{estado estacionario}, que satisface la ecuación de Laplace
+	$\nabla^2 u = 0$. El programa resuelve precisamente esto: itera en el tiempo
+	hasta que la temperatura deja de cambiar (criterio $|\Delta\phi|_{\max} < eps$),
+	obteniendo así la distribución de equilibrio.
+
+	\subsection{Discretización: diferencias finitas y stencil de 5 puntos}
+
+	El dominio continuo se reemplaza por una malla de $n \times n$ nodos interiores
+	separados por $dx = dy = 1/n$. Las segundas derivadas se aproximan con diferencias
+	centradas \cite{leveque-fdm}:
+
+	\[
+	\frac{\partial^2 u}{\partial x^2} \approx \frac{\phi_{i,k+1} - 2\phi_{i,k} +
+	\phi_{i,k-1}}{dx^2}, \qquad
+	\frac{\partial^2 u}{\partial y^2} \approx \frac{\phi_{i+1,k} - 2\phi_{i,k} +
+	\phi_{i-1,k}}{dy^2}.
+	\]
+
+	Sumando ambas, cada nodo se actualiza usando \textbf{a sí mismo y a sus 4 vecinos
+	directos} -- el clásico \textit{stencil} de 5 puntos:
+
+	\begin{center}
+	\begin{tikzpicture}[scale=0.9, every node/.style={font=\small}]
+		\foreach \x in {0,1,2}{ \foreach \y in {0,1,2}{ \draw[gray!40] (\x,\y) circle (2pt); } }
+		\draw[thick] (1,0) -- (1,2);
+		\draw[thick] (0,1) -- (2,1);
+		\foreach \x in {0,1,2}{ \foreach \y in {0,1,2}{ \fill[gray!30] (\x,\y) circle (2pt); } }
+		\fill[azulutec] (1,1) circle (3pt) node[below right] {$\phi_{i,k}$};
+		\fill[verdeutec] (1,2) circle (3pt) node[above] {$\phi_{i+1,k}$};
+		\fill[verdeutec] (1,0) circle (3pt) node[below] {$\phi_{i-1,k}$};
+		\fill[verdeutec] (0,1) circle (3pt) node[left] {$\phi_{i,k-1}$};
+		\fill[verdeutec] (2,1) circle (3pt) node[right] {$\phi_{i,k+1}$};
+	\end{tikzpicture}
+	\end{center}
+
+	\subsection{Esquema explícito (Jacobi) y estabilidad CFL}
+	\label{sec:cfl}
+
+	El esquema explícito (\textit{Forward-Time Centered-Space}, FTCS) \cite{leveque-fdm}
+	actualiza cada nodo a partir de valores del paso anterior:
+
+	\[
+	\phi^{n+1}_{i,k} = \phi^{n}_{i,k} + dt\left[
+	\frac{\phi^n_{i+1,k}+\phi^n_{i-1,k}-2\phi^n_{i,k}}{dy^2}
+	+ \frac{\phi^n_{i,k+1}+\phi^n_{i,k-1}-2\phi^n_{i,k}}{dx^2}\right].
+	\]
+
+	Para que el esquema sea \textbf{estable} (análisis de von Neumann), el paso de
+	tiempo debe satisfacer la condición CFL \cite{courant1928, vnsa-wiki}:
+
+	\[
+	dt \le \frac{1}{2}\,\frac{dx^2 dy^2}{dx^2+dy^2}
+	\;\xrightarrow{dx=dy}\; dt = \frac{\min(dx^2,dy^2)}{4} = \Theta(1/n^2),
+	\]
+
+	que es exactamente lo que implementa el código (\texttt{dt = min(dx2,dy2)/4.0}).
+	Esta dependencia $dt=\Theta(1/n^2)$ es la raíz de la complejidad teórica derivada
+	en la Sección~\ref{sec:metodo}: a mayor resolución de malla, más pasos de tiempo
+	se necesitan para llegar al estado estacionario.
+
+	\subsection{El problema concreto y la configuración experimental}
+
+	El dominio es el cuadrado unitario $[0,1]\times[0,1]$ con condiciones de frontera
+	tipo \textbf{Dirichlet}: borde derecho $\phi=1$ (caliente), borde izquierdo
+	$\phi=0$ (frío), bordes superior e inferior con una rampa lineal $\phi = k\cdot dx$,
+	e interior inicializado en $0$. Partiendo de un interior frío, el calor difunde
+	desde los bordes hasta el equilibrio (gradiente diagonal frío$\to$caliente).
+
+	Para el barrido de desempeño (objetivo b) se usan mallas
+	\textbf{$n \in \{128,256,512,1024\}$} (parámetro \texttt{grid\_size} del binario)
+	con un tope de \texttt{itmax = 20000} iteraciones y tolerancia
+	\texttt{eps = 1e-8}, ejecutadas con
+	\textbf{$p \in \{1,2,4,8,16\}$} procesos MPI sobre el clúster Khipu.
+
+	\subsection{Algoritmo paralelo: descomposición de dominio MPI y halos}
+	\label{sec:algoritmo}
+	\enlargethispage{3 \baselineskip}
+	La versión MPI (\texttt{heat-mpi-big.c}) reparte la malla en una rejilla cartesiana
+	$idim \times kdim$ tan cuadrada como sea posible (\texttt{MPI\_Dims\_create} +
+	\texttt{MPI\_Cart\_create}), de modo que cada proceso posee un subdominio de
+	$\approx (n/\sqrt{p}) \times (n/\sqrt{p})$ nodos.
+
+	Como cada proceso solo guarda su \textbf{subdominio} en memoria, el
+	\textit{stencil} en una celda del borde necesita valores de \texttt{phi} de
+	un proceso VECINO -- algo que PRAM (memoria compartida) no contempla.
+	
+	La solución: cada proceso añade una fila/columna EXTRA alrededor de su
+	subdominio, los \textbf{halos} (\textit{ghost cells}), con una copia local
+	del borde vecino. Al final de cada iteración se INTERCAMBIAN esas
+	filas/columnas (Código~\ref{lst:loop}, líneas 423--427) usando tipos
+	derivados (\texttt{MPI\_Type\_create\_subarray}) y comunicación no bloqueante
+	\cite{gropp-mpi}.
+
+	El Código~\ref{lst:loop} muestra solo el \textbf{cuerpo del bucle} (líneas
+	239--297 de 350): la inicialización corre \emph{una vez} y queda dominada por
+	las $T=\Theta(n^2)$ repeticiones (Sección~\ref{sec:Tn2}). Implementa
+	exactamente las tres fases que se formalizan como PRAM en la
+	Sección~\ref{sec:metodo}:
+	\begin{itemize}
+		\item (1) cómputo del \textit{stencil} y copia Jacobi
+		\item (2) reducción global del criterio de convergencia	cada \texttt{stride=10} pasos
+		\item (3) intercambio de halos.
+	\end{itemize}
+
+
+	\begin{lstlisting}[style=cppstyle, caption={Núcleo del bucle de iteración (\texttt{src/heat-mpi-big.c}, líneas 239--297, abreviado).}, label={lst:loop}]
+for (it = 1; it <= itmax; it++) {
+  double dphimax = 0.;
+  for (i = is + halo; i <= ie - halo; i++) {
+    for (k = ks + halo; k <= ke - halo; k++) {
+      double dphi = (phi[idx(i+1,k)] + phi[idx(i-1,k)] - 2.*phi[idx(i,k)]) * dy2i
+                  + (phi[idx(i,k+1)] + phi[idx(i,k-1)] - 2.*phi[idx(i,k)]) * dx2i;
+      dphi *= dt;
+      dphimax = dmax(dphimax, dphi);
+      phin[idxn(i,k)] = phi[idx(i,k)] + dphi;     // Jacobi: doble buffer
+    }
+  }
+  for (i = is+halo; i <= ie-halo; i++)
+    for (k = ks+halo; k <= ke-halo; k++)
+      phi[idx(i,k)] = phin[idxn(i,k)];            // copia phin -> phi
+
+  if ((it % stride) == 0) {                        // criterio cada "stride" pasos
+    if (numprocs > 1)
+      MPI_Allreduce(&dphimax, &dphimax, 1, MPI_DOUBLE, MPI_MAX, comm);
+    if (dphimax < eps) break;                      // estado estacionario
+  }
+
+  // intercambio de halos (no bloqueante) con los 4 vecinos cartesianos
+  MPI_Irecv(...); MPI_Irecv(...); MPI_Isend(...); MPI_Isend(...);
+  MPI_Waitall(4, req, statuses);                   // arriba/abajo
+  MPI_Irecv(...); MPI_Irecv(...); MPI_Isend(...); MPI_Isend(...);
+  MPI_Waitall(4, req, statuses);                   // izquierda/derecha
+}
+	\end{lstlisting}
+
+	El programa imprime, además, una línea con el siguiente formato, que es el
+	insumo directo del software de análisis (Sección~\ref{sec:metodo-experimental}):
+	
+	\begin{quote}
+	\footnotesize\ttfamily
+	RESULT,grid\_size,nprocs,idim,kdim,\\
+	iterations,wall\_time\_s,comm\_time\_s,criterion\_time\_s
+	\end{quote}
+
+	% ========== SECCIÓN 4 ==========
+	\section{Método: Modelo PRAM y Complejidad Teórica}
+	\label{sec:metodo}
+	\enlargethispage{3 \baselineskip}
+	Esta sección desarrolla el \textbf{objetivo (a)} y el punto~1 de la rúbrica
+	(\textit{``el diseño del algoritmo es adecuado y las métricas corresponden al
+	PRAM''}). La notación usada en esta sección es:
+	\begin{itemize}[itemsep=0pt, topsep=2pt, parsep=0pt, leftmargin=1.4em]
+		\item $n$ = lado de la malla interior ($N=n^2$ nodos)
+		\item $p$ = número de procesadores
+		\item $T$ = número de iteraciones hasta converger
+		\item $W_1$ = trabajo total
+		\item $D_\infty$ = profundidad
+	\end{itemize}
+
+	\subsection{El modelo PRAM y por qué aplica aquí}
+
+	El modelo \textbf{PRAM} (\textit{Parallel Random Access Machine}) asume $p$
+	procesadores síncronos que comparten memoria global y, en cada paso, ejecutan una
+	operación $O(1)$ (leer/calcular/escribir) \cite{jaja1992}. Es el análogo paralelo
+	del modelo RAM secuencial e ignora deliberadamente el costo de comunicación, para
+	aislar el \textbf{paralelismo intrínseco} del algoritmo. Sus variantes se
+	distinguen por cómo resuelven accesos simultáneos a una misma celda:
+
+	\begin{center}
+	\begin{tabular}{lcc}
+		\toprule
+		\textbf{Variante} & \textbf{Lectura concurrente} & \textbf{Escritura concurrente} \\
+		\midrule
+		EREW & \xmark & \xmark \\
+		\textbf{CREW} & \cmark & \xmark \\
+		CRCW & \cmark & \cmark \\
+		\bottomrule
+	\end{tabular}
+	\end{center}
+
+	\textbf{El solver es naturalmente CREW:}
+
+	\begin{itemize}
+		\item \textbf{Lectura concurrente (CR):} el \textit{stencil} de 5 puntos hace
+		que cada celda $\phi_{i,k}$ sea \textbf{leída por hasta 5 procesadores} a la
+		vez (el dueño de la celda y sus 4 vecinos), siempre sobre el arreglo
+		\textit{viejo} \texttt{phi}.
+		\item \textbf{Escritura exclusiva (EW):} el esquema de \textbf{Jacobi con
+		doble buffer} escribe cada resultado en un arreglo separado \texttt{phin} --
+		una celda por procesador, sin colisiones -- y solo después se copia
+		\texttt{phin}$\to$\texttt{phi}.
+	\end{itemize}
+
+	\textit{Cada punto depende solo de sus vecinos inmediatos y los nuevos valores no
+	se pisan entre sí}: esto hace que el problema sea \textbf{vergonzosamente
+	paralelo dentro de cada paso de tiempo}, y es la base de toda la escalabilidad
+	analizada en esta sección. El modelo PRAM da la cota \textit{optimista} (sin
+	comunicación); la Sección~\ref{sec:bsp} añade el costo real de halos y reducción.
+
+	\subsection{El algoritmo como programa PRAM}
+
+	El bucle de \texttt{heat-mpi-big.c} (Código~\ref{lst:loop}) se reescribe en
+	notación PRAM en el Código~\ref{lst:pram}. \texttt{forall} denota un bucle cuyas iteraciones se reparten entre los $p$ procesadores y se ejecutan en paralelo.
+
+	\vspace{0.5cm}
+	\textbf{¿Por qué el Código~\ref{lst:pram} no incluye los halos?} Aunque su
+	intercambio (Sección~\ref{sec:algoritmo}) también se repite $T$ veces, PRAM
+	es de memoria compartida y no tiene primitivo de mensajes -- se modela
+	aparte, agregando el costo de comunicación, en la Sección~\ref{sec:bsp}.
+	
+	\begin{lstlisting}[style=cppstyle, language={}, caption={Algoritmo PRAM de una iteración del solver.}, label={lst:pram}]
+Entrada: malla phi[0..n+1,0..n+1] con condiciones de frontera (Dirichlet)
+Parametros: dt = min(dx^2,dy^2)/4   (limite de estabilidad CFL)
+            eps = 1e-8              (tolerancia de convergencia)
+
+para it = 1,2,3,...                      // SECUENCIAL: cada paso usa el anterior
+  (1) forall (i,k) en el interior  [n^2 tareas independientes]   // O(1) c/u
+        dphi       <- (phi[i+1,k]+phi[i-1,k]-2*phi[i,k]) * dy2i
+                    +  (phi[i,k+1]+phi[i,k-1]-2*phi[i,k]) * dx2i
+        dphi       <- dphi * dt
+        phin[i,k]  <- phi[i,k] + dphi
+        local[i,k] <- |dphi|              // contribucion al criterio de parada
+
+  (2) forall (i,k) en el interior          // copia Jacobi  phi <- phin  [O(1) c/u]
+        phi[i,k] <- phin[i,k]
+
+  (3) dphimax <- REDUCE_MAX( local[i,k] )  // reduccion en arbol: O(log n) de profundidad
+      si dphimax < eps -> terminar          // estado estacionario alcanzado
+	\end{lstlisting}
+
+	Tres observaciones clave para el análisis:
+	\enlargethispage{4 \baselineskip}
+	\begin{enumerate}
+		\item \textbf{Dentro de un paso}, los bloques (1) y (2) son \texttt{forall}
+		puros. La anotación ``$n^2$ tareas independientes de costo $O(1)$'' del
+		Código~\ref{lst:pram} se justifica en tres pasos:
+		\begin{itemize}[itemsep=2pt, topsep=2pt, parsep=0pt, leftmargin=1.3em]
+			\item \textit{$n^2$ tareas:} el doble bucle \texttt{for(i)\,for(k)} del
+			Código~\ref{lst:loop} recorre las $n$ filas y $n$ columnas
+			\textit{interiores} de la malla; cada par $(i,k)$ es una iteración
+			$\Rightarrow$ $n\times n=n^2$ tareas.
+			\item \textit{Costo $O(1)$:} el cuerpo de la tarea (bloque (1) del
+			Código~\ref{lst:pram}) calcula \texttt{dphi} a partir de los 4 vecinos,
+			lo escala por \texttt{dt} y escribe \texttt{phin[i,k]} y
+			\texttt{local[i,k]} -- siempre el mismo número fijo de operaciones,
+			sin bucles ni recursión, sin depender de $n$, $p$ ni $(i,k)$.
+			\item \textit{Independencia:} cada tarea $(i,k)$ solo \textbf{lee}
+			\texttt{phi} (que nadie modifica en este paso) y solo
+			\textbf{escribe} su propia celda \texttt{phin[i,k]}: ninguna otra
+			tarea toca esa celda, así que no hay dependencias de datos entre
+			ellas.
+		\end{itemize}
+		Por la regla del \texttt{forall} puro, $m$ tareas independientes de
+		costo $O(1)$ aportan trabajo $O(m)$ y, con $p\ge m$ procesadores,
+		profundidad $O(1)$. Con $m=n^2$: trabajo $O(n^2)$ y profundidad $O(1)$
+		(si $p\ge n^2$).
+		\item \textbf{El criterio de parada (3)} no es independiente: combinar el
+		máximo de $n^2$ valores es una \textbf{reducción}, cuya profundidad óptima es
+		$O(\log n^2)=O(\log n)$ (árbol binario) y trabajo $O(n^2)$.
+		\item \textbf{Entre pasos} existe una dependencia estricta: $\phi^{n+1}$
+		necesita $\phi^{n}$ completo. El bucle \texttt{para it} es
+		\textbf{inherentemente secuencial}; el paralelismo vive \textit{dentro} de
+		cada paso, fijando el límite inferior de profundidad del algoritmo completo.
+	\end{enumerate}
+
+	\subsection{DAG y análisis de costos por iteración}
+	\label{sec:dag}
+
+	La Figura~\ref{fig:dag} muestra el grafo de dependencias (DAG) de una iteración
+	temporal, que se repite $T$ veces de forma secuencial. Las fórmulas de esta
+	sección y las siguientes se obtienen sumando o multiplicando estos costos
+	por $T$ (Sección~\ref{sec:Tn2}), o aplicando la reducción en árbol y el
+	modelo de costos de comunicación, derivando $T_{par}(n,p)$ respecto a $p$
+	para obtener el número óptimo de procesos: ningún paso queda
+	sin justificar -- la Tabla~\ref{tab:mapa-derivacion}, al cierre de la
+	Sección~\ref{sec:metodo}, recapitula de dónde sale cada fórmula nueva.
+
+	\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[
+		node distance=1.1cm and 1.6cm,
+		every node/.style={font=\small},
+		box/.style={draw, rounded corners, fill=azulutec!8, align=center, minimum width=6.4cm, minimum height=1.0cm},
+		decision/.style={draw, diamond, fill=naranjawarning!15, align=center, inner sep=2pt}
+	]
+		\node[box] (init) {Inicialización\\(malla + fronteras Dirichlet)};
+		\node[box, below=of init] (stencil) {(1) Stencil de 5 puntos\\\texttt{forall} $n^2$ nodos $\cdot$ $O(1)$};
+		\node[box, below=of stencil] (copy) {(2) Copia Jacobi $\phi \leftarrow \phi_n$\\\texttt{forall} $n^2$ nodos $\cdot$ $O(1)$};
+		\node[box, below=of copy] (reduce) {(3) \texttt{REDUCE\_MAX} $\to$ $d\phi_{\max}$\\árbol binario $\cdot$ $O(\log n)$};
+		\node[decision, below=1.4cm of reduce] (check) {$d\phi_{\max} < eps$?};
+		\node[box, below=1.4cm of check, fill=verdeutec!15] (done) {Estado estacionario\\$\nabla^2\phi=0$};
+
+		\draw[-Latex] (init) -- (stencil);
+		\draw[-Latex] (stencil) -- (copy);
+		\draw[-Latex] (copy) -- (reduce);
+		\draw[-Latex] (reduce) -- (check);
+		\draw[-Latex] (check) -- node[right]{sí} (done);
+		\draw[-Latex] (check.west) -- ++(-2.4,0) |- node[pos=0.25, above, sloped]{no: siguiente paso} (stencil.west);
+	\end{tikzpicture}
+	\caption{DAG de una iteración temporal. El bloque punteado se repite $T=\Theta(n^2)$
+	veces; el ciclo completo es la cadena de dependencias secuencial.}
+	\label{fig:dag}
+	\end{figure}
+
+	La Tabla~\ref{tab:dag-costos} anota el costo de cada fase sobre el modelo PRAM con	$p$ procesadores.
+	
+	\enlargethispage{3 \baselineskip}
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{lccc}
+		\toprule
+		\textbf{Fase} & \textbf{Trabajo} & \textbf{Profundidad} & \textbf{Tiempo con $p$ proc.} \\
+		\midrule
+		(1) Stencil & $\Theta(n^2)$ & $\Theta(1)$ & $\Theta(n^2/p)$ \\
+		(2) Copia Jacobi & $\Theta(n^2)$ & $\Theta(1)$ & $\Theta(n^2/p)$ \\
+		(3) Reduce máximo & $\Theta(n^2)$ & $\Theta(\log n)$ & $\Theta(n^2/p+\log p)$ \\
+		\midrule
+		\textbf{Por iteración} & $\Theta(n^2)$ & $\Theta(\log n)$ & $\Theta(n^2/p+\log p)$ \\
+		\bottomrule
+	\end{tabular}
+	\caption{Costo PRAM por fase y por iteración (sin comunicación).}
+	\label{tab:dag-costos}
+	\end{table}
+
+	El cuello de botella de \textbf{profundidad} dentro de un paso es la reducción del
+	criterio de parada, $\Theta(\log n)$; todo lo demás es $\Theta(1)$. En el código
+	MPI esa reducción es el \texttt{MPI\_Allreduce}, que por eso se ejecuta solo cada
+	\texttt{stride=10} pasos (Código~\ref{lst:loop}) -- una optimización que el
+	modelo justifica directamente.
+
+	\subsection{Número de iteraciones hasta converger: \texorpdfstring{$T=\Theta(n^2)$}{T=Theta(n2)}}
+	\label{sec:Tn2}
+
+	La complejidad total depende de cuántos pasos $T$ se necesitan, y $T$
+	\textbf{no es constante}: crece con la malla, como consecuencia directa del
+	esquema explícito.
+
+	\textbf{Estabilidad (CFL).} Como se vio en la Sección~\ref{sec:problema}, la
+	condición de estabilidad de von Neumann fija $dt = \Theta(1/n^2)$
+	\cite{mit18300, vnsa-wiki}.
+
+	\textbf{Tasa de convergencia.} Iterar el esquema explícito hasta el estado
+	estacionario equivale a una \textbf{iteración de Jacobi} sobre la ecuación de
+	Laplace. El error se descompone en modos de Fourier; el modo más lento decae por
+	iteración con un factor $\approx 1-\Theta(dt\cdot\lambda_{\min})$, donde
+	$\lambda_{\min}=2\pi^2$ es el menor autovalor del Laplaciano en el cuadrado
+	unitario (constante, independiente de $n$). El número de pasos para llevar ese
+	modo bajo \texttt{eps} es
+
+	\[
+	T = \Theta\!\left(\frac{1}{dt\,\lambda_{\min}}\right) = \Theta\!\left(\frac{1}{dt}\right)
+	= \Theta(n^2).
+	\]
+
+	\textbf{Validación empírica preliminar.} En una malla $80\times80$
+	($n^2=6400$) el solver converge en $\approx14{,}300$ iteraciones (ver
+	\texttt{docs/heat-equation.md}). El cociente $14300/6400\approx2.2$ es la
+	constante del $\Theta(\cdot)$, y debería mantenerse aproximadamente constante al
+	variar $n$ -- una predicción concreta y verificable con el objetivo (b).
+
+	\begin{quote}
+	\small\textit{Implicación HPC: afinar la malla cuesta doble. Duplicar $n$
+	multiplica por 4 el trabajo por paso \textbf{y} por 4 el número de pasos
+	$\Rightarrow$ el costo serial crece como $n^4$. De ahí la necesidad de
+	paralelizar.}
+	\end{quote}
+
+	\subsection{Trabajo total, profundidad y paralelismo disponible}
+	\label{sec:brent}
+
+	Combinando el costo por iteración (Tabla~\ref{tab:dag-costos}) con
+	$T=\Theta(n^2)$ (Sección~\ref{sec:Tn2}):
+
+	\textbf{Trabajo total} (= tiempo secuencial, $1$ procesador):
+	\[
+	\boxed{W_1 = T_1 = \Theta(T\cdot n^2) = \Theta(n^2\cdot n^2) = \Theta(n^4) = \Theta(N^2)}
+	\]
+
+	\textbf{Profundidad total} (cadena crítica): los $T$ pasos son secuenciales y cada
+	uno aporta profundidad $\Theta(\log n)$:
+	\[
+	\boxed{D_\infty = \Theta(T\cdot\log n) = \Theta(n^2\log n)}
+	\]
+
+	\textbf{Paralelismo disponible} (procesadores que el algoritmo puede aprovechar):
+	\[
+	\frac{W_1}{D_\infty} = \frac{\Theta(n^4)}{\Theta(n^2\log n)} = \Theta\!\left(\frac{n^2}{\log n}\right).
+	\]
+
+	Es decir, el algoritmo puede usar útilmente hasta $\approx n^2$ procesadores (uno
+	por nodo de la malla, salvo el factor $\log n$ de la reducción); más allá de eso,
+	los procesadores extra quedan ociosos. La Sección~\ref{sec:pram-metricas}
+	reparte directamente $W_1$ entre $p$ procesadores (sumando el costo de la
+	reducción) para obtener $T_p$.
+
+	\subsection{Tiempo, \textit{speedup} y eficiencia en el modelo PRAM}
+	\label{sec:pram-metricas}
+
+	A partir del costo por iteración $\Theta(n^2/p+\log p)$ (Tabla~\ref{tab:dag-costos})
+	y $T=\Theta(n^2)$:
+
+	\[
+	\boxed{T_p = \Theta\!\Big(n^2\big(\tfrac{n^2}{p}+\log p\big)\Big)
+	= \Theta\!\left(\frac{n^4}{p}+n^2\log p\right)}
+	\]
+
+	Con el máximo paralelismo $p=n^2$: $T_{n^2}=\Theta(n^2\log n)$, que coincide con
+	$D_\infty$ -- el algoritmo es \textit{óptimo en profundidad}.
+
+	\textbf{Speedup} (respecto del óptimo secuencial $T_1=\Theta(n^4)$):
+	\[
+	S_p = \frac{T_1}{T_p} = \frac{n^4}{n^4/p+n^2\log p}
+	= \frac{p}{1+\dfrac{p\log p}{n^2}} .
+	\]
+
+	\textbf{Eficiencia:}
+	\[
+	\boxed{E_p = \frac{S_p}{p} = \frac{1}{1+\dfrac{p\log p}{n^2}}}
+	\]
+
+	\begin{itemize}
+		\item $E_p\to1$ (\textit{speedup} casi lineal) \textbf{mientras}
+		$n^2 \gg p\log p$.
+		\item La eficiencia se degrada cuando $p$ se acerca a $n^2$: justo cuando el
+		trabajo por procesador ($n^2/p$) se vuelve comparable al costo $\log p$ de la
+		reducción.
+	\end{itemize}
+
+	\textbf{Costo} (procesadores $\times$ tiempo) y \textit{cost-optimalidad}:
+	\[
+	C_p = p\cdot T_p = \Theta(n^4+p\,n^2\log p).
+	\]
+	El algoritmo paralelo es \textbf{cost-optimal} (mismo orden que el trabajo
+	secuencial $\Theta(n^4)$) siempre que $p\log p=O(n^2)$, es decir
+	\[
+	p = O\!\left(\frac{n^2}{\log n}\right),
+	\]
+	la cota teórica del número útil de procesos en el modelo idealizado. La
+	Sección~\ref{sec:bsp} la corrige a la baja al incluir comunicación real.
+
+	\subsection{Del PRAM a la realidad: memoria distribuida y halos (MPI)}
+	\label{sec:bsp}
+
+	El modelo PRAM supone comunicación gratuita. El código real es de
+	\textbf{memoria distribuida}: cada proceso solo ve su porción de la malla y debe
+	\textbf{comunicar} explícitamente. Modelamos el costo de comunicación con el
+	modelo de latencia--ancho de banda visto en el curso (Unidad 2): enviar un
+	mensaje de $m$ palabras cuesta $t_s+t_w\,m$, donde $t_s$ es la latencia
+	(\textit{startup}) y $t_w$ el costo por palabra (inverso del ancho de banda).
+
+	\textbf{Descomposición de dominio 2D.} \texttt{MPI\_Dims\_create} reparte la
+	malla en una rejilla lo más cuadrada posible, $\sqrt{p}\times\sqrt{p}$ -- el
+	caso $d=2$ de una malla $d$-dimensional con $p$ nodos (Unidad 4.3,
+	``Topologías''), donde el lado de cada subdominio escala como $p^{1/d}$. Cada
+	proceso posee un subdominio de
+	$\dfrac{n}{\sqrt p}\times\dfrac{n}{\sqrt p}=\dfrac{n^2}{p}$ nodos
+	(Sección~\ref{sec:algoritmo}).
+
+	La Tabla~\ref{tab:bsp-costos} descompone el costo \textbf{por iteración} de un
+	proceso.
+
+	\begin{table}[H]
+	\centering
+	\begin{tabular}{lll}
+		\toprule
+		\textbf{Componente} & \textbf{Costo} & \textbf{Origen en el código} \\
+		\midrule
+		Cómputo & $\Theta\!\left(\dfrac{n^2}{p}\right)$ & doble bucle del \textit{stencil} (Código~\ref{lst:loop}) \\
+		Halos & $\Theta\!\left(t_s+t_w\dfrac{n}{\sqrt p}\right)$ & \texttt{Irecv}/\texttt{Isend}/\texttt{Waitall}, 4 vecinos \\
+		Criterio & $\Theta\!\left(\dfrac{t_s\log p}{\text{stride}}\right)$ & \texttt{MPI\_Allreduce} cada \texttt{stride} pasos \\
+		\bottomrule
+	\end{tabular}
+	\caption{Costo por iteración de un proceso (cómputo + comunicación).}
+	\label{tab:bsp-costos}
+	\end{table}
+
+	La clave es el \textbf{cociente superficie/volumen} comunicación-a-cómputo por
+	paso:
+	\[
+	\frac{\text{comm}}{\text{comp}} = \frac{n/\sqrt p}{n^2/p} = \frac{\sqrt p}{n}.
+	\]
+	El cómputo crece con el \textbf{área} del subdominio ($n^2/p$); la comunicación
+	solo con su \textbf{perímetro} ($n/\sqrt p$). Por eso una malla grande amortiza
+	mejor la comunicación: la eficiencia se mantiene mientras $n\gg\sqrt p$.
+
+	\textbf{Tiempo paralelo total} (sobre $T=\Theta(n^2)$ pasos):
+	\[
+	T_{\text{par}}(n,p) =
+	\underbrace{\Theta\!\left(\frac{n^4}{p}\right)}_{\text{cómputo}}
+	+\underbrace{\Theta\!\left(\frac{n^3}{\sqrt p}\right)}_{\text{halos (ancho de banda)}}
+	+\underbrace{\Theta\!\left(\frac{n^2\,t_s\log p}{\text{stride}}\right)}_{\text{reducción (latencia)}}.
+	\]
+
+	\textbf{Eficiencia con comunicación:}
+	\[
+	E(n,p) = \frac{1}{1+\Theta\!\left(\dfrac{t_w\sqrt p}{n}\right)
+	+\Theta\!\left(\dfrac{t_s\,p\log p}{n^2}\right)} .
+	\]
+	
+	El término dominante al crecer $p$ es el de ancho de banda $\Theta(\sqrt p/n)$ --
+	la huella de superficie/volumen. Esto explica cualitativamente lo que se observa
+	en el objetivo (b): para $n$ pequeño la eficiencia cae rápido al aumentar $p$ (el
+	código serial puede incluso ganar por el \textit{overhead}), mientras que para
+	$n$ grande el \textit{speedup} se acerca al lineal -- el mismo fenómeno
+	documentado en \cite{nmsu-hpc, lammps}.
+
+	\subsection{Número óptimo de procesos y escalabilidad débil}
+	\label{sec:isoeficiencia}
+	\enlargethispage{3 \baselineskip}
+
+	\textbf{Número óptimo de procesos} (para $n$ fijo). Igual que en el ejemplo de
+	KNN visto en clase (Unidades 4.2/4.3) -- donde el punto óptimo de procesos se
+	obtiene derivando $T(n,p)$ respecto a $p$ e igualando a cero --, minimizamos
+	$T_{\text{par}}(n,p)$ en $p$: el término de cómputo $\propto1/p$ decrece y el de
+	comunicación $\propto\sqrt p$ crece, así que $\partial T_{\text{par}}/\partial
+	p=0$ se cumple donde el cómputo por proceso iguala a la comunicación,
+	$c_f\,n^2/p\approx t_w\,n/\sqrt p$:
+	\[
+	\boxed{p_{\text{opt}}=\Theta\!\left(\Big(\tfrac{c_f}{t_w}\Big)^2 n^2\right)=\Theta(n^2).}
+	\]
+	Coincide en orden con la cota PRAM ($p=O(n^2/\log n)$, Sección~\ref{sec:pram-metricas}):
+	no tiene sentido usar más de $\approx n^2$ procesos. En la práctica la constante
+	$(c_f/t_w)^2$ es pequeña, así que el óptimo medido estará bastante por debajo de
+	$n^2$; el barrido $p\times n$ del objetivo (b) sirve precisamente para calibrar
+	esa constante.
+
+	\textbf{Escalabilidad débil.} ¿Cómo debe crecer $n$ con $p$ para mantener
+	$E(n,p)$ (Sección~\ref{sec:bsp}) aproximadamente constante? El término que
+	domina al crecer $p$ es el de ancho de banda, $\Theta(t_w\sqrt p/n)$;
+	mantenerlo constante exige
+	\[
+	\boxed{n=\Theta(\sqrt p) \quad\Longleftrightarrow\quad W_1=n^4=\Theta(p^2).}
+	\]
+	Es una escalabilidad \textbf{moderada}: para conservar la eficiencia hay que
+	aumentar el problema aproximadamente con el cuadrado del número de procesos --
+	típico de \textit{stencils} de diferencias finitas.
+	
+	\vspace{0.5cm}
+	\textbf{Recapitulación: ¿de dónde sale cada fórmula?} Antes de consolidar los
+	valores finales (Tabla~\ref{tab:resumen-pram}), la Tabla~\ref{tab:mapa-derivacion}
+	recorre las subsecciones~\ref{sec:dag}--\ref{sec:isoeficiencia} y resume, para
+	cada una, qué resultado nuevo agrega y de dónde proviene: conteo directo,
+	resultado citado, o una multiplicación/sustitución algebraica sobre lo
+	anterior -- ningún paso queda sin justificar.
+
+	\begin{table}[H]
+	\centering
+	\scriptsize
+	\setlength{\tabcolsep}{4pt}
+	\renewcommand{\arraystretch}{0.95}
+	\begin{tabularx}{\textwidth}{@{}l X@{}}
+		\toprule
+		\textbf{Subsec.} & \textbf{Qué resultado nuevo agrega y dónde se origina} \\
+		\midrule
+		4.2 & $W=O(n^2)$, $D=O(1)$ para (1)/(2) $\leftarrow$ conteo directo: $n^2$ tareas de costo $O(1)$ (justificado arriba) \\
+		4.3 & \texttt{REDUCE\_MAX}: $\Theta(n^2)$ trabajo, $\Theta(\log n)$ profundidad $\leftarrow$ reducción en árbol binario (resultado estándar); el total ``por iteración'' es la suma de las 3 fases \\
+		4.4 & $T=\Theta(n^2)$ $\leftarrow$ \textit{no} viene de PRAM: condición CFL ($dt=\Theta(1/n^2)$) más tasa de convergencia de Jacobi (dato externo, Sección~\ref{sec:Tn2}) \\
+		4.5 & $W_1=\Theta(n^4)$, $D_\infty=\Theta(n^2\log n)$, paralelismo disponible $W_1/D_\infty=\Theta(n^2/\log n)$ $\leftarrow$ $T\times$(costo/iteración, Tabla~\ref{tab:dag-costos}); cociente directo (álgebra) \\
+		4.6 & $T_p,S_p,E_p$ $\leftarrow$ $T_p=T\times$tiempo/iter.\ con $p$; $S_p=T_1/T_p$, $E_p=S_p/p$ (definiciones, álgebra) \\
+		4.7 & Costo halo/reducción $\leftarrow$ cómputo $n^2/p$, halo $\propto n/\sqrt p$ (malla $\sqrt p\times\sqrt p$, Unidad 4.3) con modelo $t_s+t_wm$ (Unidad 2); $T_{par}=T\times$suma \\
+		4.8 & $p_{opt}$, escalabilidad débil $\leftarrow$ $p_{opt}$ = mínimo de $T_{par}(n,p)$ (mismo método que el ejemplo KNN, Unidades 4.2/4.3); $n=\Theta(\sqrt p)$ de $E(n,p)$ constante \\
+		\bottomrule
+	\end{tabularx}
+	\caption{Mapa de derivación de la Sección~\ref{sec:metodo}: cada fórmula nueva
+	se obtiene de la anterior por conteo directo, un resultado citado, o una
+	multiplicación/sustitución algebraica.}
+	\label{tab:mapa-derivacion}
+	\end{table}
+
+	\subsection{Resumen de complejidades}
+	\enlargethispage{4 \baselineskip}
+	La Tabla~\ref{tab:resumen-pram} consolida los resultados de esta sección y los
+	enlaza con las tres métricas que pide el punto~1 de la rúbrica (tiempo,
+	\textit{speedup}, eficiencia).
+
+	\begin{table}[H]
+	\centering
+	\small
+	\begin{tabular}{lll}
+		\toprule
+		\textbf{Magnitud} & \textbf{PRAM (sin comunicación)} & \textbf{Memoria distribuida (MPI real)} \\
+		\midrule
+		Pasos de tiempo $T$ & $\Theta(n^2)$ & $\Theta(n^2)$ \\
+		Trabajo / $T_1$ & $\Theta(n^4)=\Theta(N^2)$ & $\Theta(n^4)$ \\
+		Profundidad $D_\infty$ & $\Theta(n^2\log n)$ & -- \\
+		Tiempo $T_p$ & $\Theta\!\big(\tfrac{n^4}{p}+n^2\log p\big)$ &
+			$\Theta\!\big(\tfrac{n^4}{p}+\tfrac{n^3}{\sqrt p}+n^2 t_s\log p\big)$ \\
+		\textit{Speedup} $S_p$ & $\dfrac{p}{1+p\log p/n^2}$ & $\dfrac{p}{1+\Theta(\sqrt p/n)+\dots}$ \\
+		Eficiencia $E_p$ & $\dfrac{1}{1+p\log p/n^2}$ &
+			$\dfrac{1}{1+\Theta(t_w\sqrt p/n)+\Theta(t_s p\log p/n^2)}$ \\
+		Procesos útiles & $O(n^2/\log n)$ & $p_{\text{opt}}=\Theta(n^2)$ (constante chica) \\
+		Escalabilidad débil ($E\approx$ const.) & $n^2=\Theta(p\log p)$ & $n=\Theta(\sqrt p)$ \\
+		\bottomrule
+	\end{tabular}
+	\caption{Resumen de complejidades teóricas: modelo PRAM puro vs. extensión a memoria distribuida (MPI).}
+	\label{tab:resumen-pram}
+	\end{table}
+
+	% ========== SECCIÓN 5 ==========
+	\section{Metodología Experimental y Métricas}
+	\label{sec:metodo-experimental}
+
+	Esta sección cubre la parte de \textbf{métricas} del punto~1 de la rúbrica y
+	prepara el terreno para los objetivos (b) y (c).
+
+	\subsection{Definición de las métricas}
+	\label{sec:metricas}
+
+	A partir de los tiempos de pared $T(n,p)$ medidos para cada combinación
+	(tamaño de malla $n$, número de procesos $p$), se calculan:
+
+	\[
+	S(p) = \frac{T(n,1)}{T(n,p)} \qquad\text{(\textit{speedup})}, \qquad
+	E(p) = \frac{S(p)}{p} \qquad\text{(eficiencia)}.
+	\]
+
+	Estas son exactamente las cantidades $S_p$ y $E_p$ derivadas en las
+	Secciones~\ref{sec:pram-metricas} y \ref{sec:bsp}, evaluadas con datos reales en
+	vez de la fórmula asintótica.
+
+	% ========== SECCIÓN 8 ==========
+	\section{Bibliografía y Uso de IA}
+	\label{sec:biblio}
+
+	\subsection{Referencias}
+
+	\begin{thebibliography}{99}
+	\enlargethispage{4 \baselineskip}
+	\bibitem{strauss-pde}
+	W.\ A.\ Strauss, \textit{Partial Differential Equations: An Introduction},
+	2.\textsuperscript{a} ed. Wiley, 2008. Referencia base para la ecuación de calor,
+	el estado estacionario y la ecuación de Laplace de la
+	Sección~\ref{sec:problema}.
+
+	\bibitem{leveque-fdm}
+	R.\ J.\ LeVeque, \textit{Finite Difference Methods for Ordinary and Partial
+	Differential Equations: Steady-State and Time-Dependent Problems}. SIAM, 2007.
+	Cubre la discretización por diferencias finitas (\textit{stencil} de 5 puntos),
+	el esquema FTCS y el análisis de estabilidad de von Neumann usados en la
+	Sección~\ref{sec:problema}.
+
+	\bibitem{courant1928}
+	R.\ Courant, K.\ Friedrichs, and H.\ Lewy, ``Über die partiellen
+	Differenzengleichungen der mathematischen Physik,'' \textit{Mathematische
+	Annalen}, vol.\ 100, no.\ 1, pp.\ 32--74, 1928. Origen de la condición de
+	estabilidad CFL aplicada en la Sección~\ref{sec:cfl}.
+
+	\bibitem{gropp-mpi}
+	W.\ Gropp, E.\ Lusk, and A.\ Skjellum, \textit{Using MPI: Portable Parallel
+	Programming with the Message-Passing Interface}, 3.\textsuperscript{a} ed. MIT
+	Press, 2014. Referencia para la descomposición de dominio, el intercambio de
+	\textit{halos} (\textit{ghost cells}) y la comunicación no bloqueante de la
+	Sección~\ref{sec:algoritmo}.
+
+	\bibitem{jaja1992}
+	J.\ JaJa, \textit{An Introduction to Parallel Algorithms}. Addison-Wesley, 1992.
+	Referencia base para el modelo PRAM, las clases EREW/CREW/CRCW y el análisis de
+	trabajo-profundidad (Secciones~\ref{sec:metodo}--\ref{sec:brent}).
+
+	\bibitem{mit18300}
+	MIT OpenCourseWare, \textit{18.337J / 6.338J: Parallel Computing and Scientific
+	Machine Learning} -- notas de PRAM y modelos de computación paralela.
+	\url{https://ocw.mit.edu/}. Usado como referencia introductoria al modelo PRAM y
+	su relación con algoritmos numéricos sobre mallas.
+
+	\bibitem{vnsa-wiki}
+	Wikipedia, \textit{Von Neumann stability analysis}.
+	\url{https://en.wikipedia.org/wiki/Von_Neumann_stability_analysis}. Base de la
+	condición CFL $\Delta t \le \min(\Delta x^2,\Delta y^2)/4$ usada en la
+	Sección~\ref{sec:cfl} y en la derivación de $T=\Theta(n^2)$
+	(Sección~\ref{sec:Tn2}).
+
+	\bibitem{grama2003}
+	A.\ Grama, A.\ Gupta, G.\ Karypis, and V.\ Kumar, \textit{Introduction to Parallel
+	Computing}, 2.\textsuperscript{a} ed. Addison-Wesley, 2003. Referencia general
+	para las métricas de \textit{speedup} y eficiencia ($S_p=T_1/T_p$,
+	$E_p=S_p/p$) usadas en la Sección~\ref{sec:metricas}.
+
+	\bibitem{nmsu-hpc}
+	New Mexico State University HPC, \textit{Serial vs. Parallel Programming with
+	MPI}. \url{https://hpc.nmsu.edu/discovery/mpi/serial-vs-parallel/}. Usado en la
+	Sección~\ref{sec:metodo-experimental} para interpretar por qué el
+	\textit{speedup} y la eficiencia dependen del tamaño del problema $n$.
+
+	\bibitem{lammps}
+	LAMMPS Documentation, \textit{Measuring performance}.
+	\url{https://docs.lammps.org/Speed_measure.html}. Define la eficiencia paralela
+	como rendimiento$(p)$/(rendimiento$(1)\times p$) y la distinción \textit{strong}
+	vs.\ \textit{weak scaling} usada en la Sección~\ref{sec:metricas}.
+
+	\end{thebibliography}
+
+	\subsection{Uso de Inteligencia Artificial}
+	\enlargethispage{4 \baselineskip}
+	En el desarrollo de este proyecto y en la redacción de este informe se utilizó
+	asistencia de IA (\textit{Claude}, Anthropic) de la siguiente manera:
+
+	\begin{itemize}
+		\item \textbf{Código (objetivo a/b):} apoyo para depurar el intercambio de
+		halos no bloqueante en \texttt{src/heat-mpi-big.c}, redactar los
+		\textit{scripts} de SLURM (\texttt{scripts/benchmark.slurm}) y el
+		\textit{script} de recolección de resultados (\texttt{scripts/collect\_results.sh}).
+		\item \textbf{Análisis (objetivo c):} apoyo para estructurar
+		\texttt{analysis/plot\_performance.py} (cálculo de \textit{speedup},
+		eficiencia y generación de las cuatro gráficas).
+		\item \textbf{Documentación y modelo PRAM (objetivo a):} apoyo para
+		estructurar las derivaciones del modelo PRAM, el análisis
+		trabajo-profundidad, el modelo de costos de comunicación y el análisis de
+		número óptimo de procesos / escalabilidad (\texttt{docs/pram-y-complejidad.md}),
+		así como para traducir y reorganizar ese contenido en las
+		Secciones~\ref{sec:metodo}--\ref{sec:metodo-experimental} de este informe.
+		\item \textbf{Redacción de este informe parcial:} apoyo para estructurar el
+		documento \LaTeX{} (formato heredado de \texttt{Evaluacion\_Continua\_1.tex}) y
+		redactar las secciones de introducción y metodología.
+	\end{itemize}
+
+	En todos los casos, \textbf{el equipo revisó, validó y es responsable del
+	contenido técnico final}: las derivaciones matemáticas, el código fuente y el
+	contenido presentado en este documento.
+
+\end{document}

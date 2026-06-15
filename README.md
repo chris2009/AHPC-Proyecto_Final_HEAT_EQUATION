@@ -1,12 +1,13 @@
 # Proyecto AHPC — Ecuación de Calor (Heat Equation)
 ## Informe de seguimiento: avance y estatus para la Entrega Parcial
 
-> **Repositorio:** https://github.com/hugoangeles0810/ahpc-heat-equation
+> **Repositorio (entrega personal):** https://github.com/chris2009/AHPC-Proyecto_Final_HEAT_EQUATION
+> **Repositorio del equipo (código base):** https://github.com/hugoangeles0810/ahpc-heat-equation — incluido como copia completa en `Archivos_proyecto_parcial/ahpc-heat-equation/`
 > **Curso:** CS8084 — Applied High Performance Computing, Posgrado UTEC 2026-I
 > **Profesor:** José Fiestas
 > **Proyecto elegido:** Opción 4 — *Ecuación de calor* (análisis de performance de un solver MPI que resuelve la EDP de calor en paralelo)
-> **Última revisión analizada:** commit `c7adab8` (2026-06-10)
-> **Informe parcial:** ✅ `Informe_Parcial.tex` → `Informe_Parcial.pdf` (20 páginas) — completado
+> **Última revisión del repo del equipo analizada:** commit `c7adab8` (2026-06-10)
+> **Informe parcial:** ✅ `Informe_Parcial.tex` → `Informe_Parcial.pdf` (15 páginas) — completado y re-encuadrado para usar únicamente conceptos vistos en clase (PRAM, modelo de costos de comunicación $t_s+t_w m$, topologías de malla y número óptimo de procesos / escalabilidad débil), sin nombrar BSP, el teorema de Brent ni "isoeficiencia"
 > **Fechas clave:** Entrega parcial → **domingo 14/06/2026** · Entrega final → **viernes 17/07/2026** · Sustentación → **sábado 18/07/2026**
 
 ---
@@ -16,13 +17,13 @@
 El repositorio del grupo está **bastante avanzado para ser una entrega parcial**: ya existe
 código funcional (versión serial y versión MPI con descomposición de dominio 2D + halos),
 un documento de **PRAM y complejidad teórica muy completo** (10 páginas, con DAG,
-análisis trabajo–profundidad, isoeficiencia y número óptimo de procesos), infraestructura
+análisis trabajo–profundidad, número óptimo de procesos y escalabilidad débil), infraestructura
 de benchmarking para el clúster **Khipu** (SLURM), dos corridas experimentales reales
 (`exp01`, `exp02`) y un script de análisis que genera las gráficas de tiempo, *speedup*,
 eficiencia e iteraciones.
 
 El equipo ya **completó el empaquetado que pide la sección 7.1 del enunciado**: existe el
-**informe parcial consolidado** (`Informe_Parcial.tex` → `Informe_Parcial.pdf`, 20
+**informe parcial consolidado** (`Informe_Parcial.tex` → `Informe_Parcial.pdf`, 15
 páginas) con nombre del proyecto e integrantes, **% de participación** (100% para los 4
 integrantes), introducción, método (PRAM + métricas), resultados preliminares,
 conclusiones y bibliografía con declaración de uso de IA.
@@ -45,7 +46,8 @@ está listo.** Solo falta subir el PDF a Canvas (entrega administrativa).
 |---|---|
 | Nombre del proyecto | Análisis de performance del solver MPI de la Ecuación de Calor (2D, diferencias finitas) |
 | Tema del enunciado | Sección 4 — *Ecuación de calor* (PDF `HPC-Proyecto-2026I-1.pdf`) |
-| Repositorio | [`hugoangeles0810/ahpc-heat-equation`](https://github.com/hugoangeles0810/ahpc-heat-equation) |
+| Repositorio (entrega personal) | [`chris2009/AHPC-Proyecto_Final_HEAT_EQUATION`](https://github.com/chris2009/AHPC-Proyecto_Final_HEAT_EQUATION) |
+| Repositorio del equipo (código base) | [`hugoangeles0810/ahpc-heat-equation`](https://github.com/hugoangeles0810/ahpc-heat-equation) |
 | Integrantes (según `README.md` del repo) | Hugo Angeles, Christian Cajusol, Jhomar Yurivilca, Francisco Meza |
 | % de participación | ✅ **100%** para los 4 integrantes (Hugo Angeles, Christian Cajusol, Jhomar Yurivilca, Francisco Meza) — Tabla "Participación del equipo" de `Informe_Parcial.tex` |
 | Clúster usado | Khipu (UTEC), cuenta `postgrado`, nodos Xeon Gold 6130 |
@@ -75,9 +77,9 @@ La rúbrica de la entrega parcial pondera:
 
 | # | Criterio | Puntos | Estado actual |
 |---|---|---|---|
-| 1 | Desarrollo de PRAM y métricas | 6 | ✅ **Logrado** — `docs/pram-y-complejidad.md` cubre PRAM, DAG, work-depth, Brent, isoeficiencia y las 3 métricas pedidas |
-| 2 | Uso correcto de fuentes externas | 4 | ✅ **Logrado** — 10 referencias citadas con su rol específico + nota explícita de uso de IA (Claude) |
-| 3 | Presentación escrita (informe) y trabajo en grupo | 4 | ✅ **Logrado** — informe consolidado `Informe_Parcial.tex`/`.pdf` (20 páginas) con nombre, integrantes, % de participación, introducción, método y bibliografía |
+| 1 | Desarrollo de PRAM y métricas | 6 | ✅ **Logrado** — `docs/pram-y-complejidad.md` cubre PRAM, DAG, work-depth, modelo de costos de comunicación, número óptimo de procesos / escalabilidad débil y las 3 métricas pedidas |
+| 2 | Uso correcto de fuentes externas | 4 | ✅ **Logrado** — 7 referencias citadas con su rol específico + nota explícita de uso de IA (Claude) |
+| 3 | Presentación escrita (informe) y trabajo en grupo | 4 | ✅ **Logrado** — informe consolidado `Informe_Parcial.tex`/`.pdf` (15 páginas) con nombre, integrantes, % de participación, introducción, método y bibliografía |
 | 4 | Presentación oral | 6 | ⏳ N/A todavía — corresponde a la sustentación/avance oral, no al repo |
 
 ---
@@ -123,14 +125,16 @@ por punto:
   convergencia de Jacobi sobre Laplace, con una validación empírica citada (malla 80×80 →
   ~14 300 iteraciones).
 - Análisis **trabajo–profundidad**: `W₁ = Θ(n⁴)`, `D∞ = Θ(n² log n)`, paralelismo
-  disponible `Θ(n²/log n)`, cota de Brent.
+  disponible `Θ(n²/log n)`.
 - **Tp, Speedup y Eficiencia** en el modelo PRAM puro:
   `Sp = p / (1 + p·log p / n²)`, `Ep = 1 / (1 + p·log p / n²)`.
-- Extiende el modelo a **memoria distribuida** (BSP, costo `tₛ + tw·m`): costo de halos
-  `Θ(n/√p)`, costo de la reducción `Θ(tₛ log p / stride)`, razón
+- Extiende el modelo a **memoria distribuida** con el modelo de costos de comunicación
+  visto en el curso (Unidad 2, `tₛ + tw·m`) y las topologías de malla (Unidad 4.3): costo
+  de halos `Θ(n/√p)`, costo de la reducción `Θ(tₛ log p / stride)`, razón
   comunicación/cómputo `√p / n`.
-- **Isoeficiencia** `Θ(p² log² p)` y **número óptimo de procesos**
-  `p_opt = Θ(n²)` (acotado en la práctica por la constante `(c_f/t_w)²`).
+- **Número óptimo de procesos** `p_opt = Θ(n²)` (mismo método de derivar
+  `∂T_par/∂p = 0` que el ejemplo de KNN de la Unidad 4.2/4.3, acotado en la práctica por
+  la constante `(c_f/t_w)²`) y **escalabilidad débil** `n = Θ(√p)`.
 - Sección final que **explica cómo normalizar** la fórmula teórica contra el CSV de
   mediciones (mínimos cuadrados sobre `a·n⁴/p + b·n³/√p + c`) — pero **esto todavía no
   está implementado en `analysis/plot_performance.py`** (ver §7).
@@ -250,10 +254,10 @@ Ya está cubierto y referenciado correctamente:
 
 - **`README.md`** cita 2 fuentes (NMSU HPC, LAMMPS docs) para la metodología de medición
   de *speedup*/eficiencia y la distinción *strong* vs *weak scaling*.
-- **`docs/pram-y-complejidad.md`** cita **10 fuentes** agrupadas por rol (modelo PRAM /
-  work-depth / Brent; isoeficiencia y descomposición de dominio; estabilidad CFL y
-  convergencia; documentación MPI), cada una con una frase explicando **para qué se
-  usó**.
+- **`docs/pram-y-complejidad.md`** cita **7 fuentes** agrupadas por rol (modelo PRAM y
+  trabajo–profundidad; modelo de costos de comunicación y descomposición de dominio;
+  estabilidad CFL y convergencia; documentación MPI), cada una con una frase explicando
+  **para qué se usó**.
 - **Declaración explícita de uso de IA**: el documento PRAM incluye la nota
   > *"Este documento se redactó con asistencia de IA (Claude) para estructurar el
   > análisis trabajo-profundidad y localizar las referencias canónicas; las fórmulas se
@@ -270,29 +274,36 @@ Ya está cubierto y referenciado correctamente:
 ## 6. Estructura actual del repositorio
 
 ```
-ahpc-heat-equation/
-├── README.md                      # overview, uso, resultados, referencias, equipo
-├── assignment.pdf                 # enunciado del proyecto (igual al de Canvas)
-├── Makefile                       # make → bin/heat-big, bin/heat-mpi-big
-├── src/
-│   ├── heat-big.c                 # solver serial
-│   └── heat-mpi-big.c             # solver MPI (dominio 2D + halos)
-├── scripts/
-│   ├── run_local.sh               # smoke test local
-│   ├── benchmark.slurm            # barrido p×n en Khipu (SLURM)
-│   └── collect_results.sh         # parsea salida del solver -> CSV
-├── analysis/
-│   ├── plot_performance.py        # CSV -> tiempo/speedup/eficiencia/iteraciones
-│   └── requirements.txt
-├── results/
-│   ├── EXPERIMENTS.md             # bitácora de experimentos
-│   ├── exp01-1node-16core/        # CSV + 4 figuras
-│   └── exp02-2node-8core/         # CSV + 4 figuras
-└── docs/
-    ├── heat-equation.md           # guía didáctica (física -> código)
-    ├── pram-y-complejidad.md      # objetivo (a): PRAM + complejidad
-    ├── generate_figures.py        # genera las figuras de heat-equation.md
-    └── img/                       # figuras generadas
+AHPC-Proyecto_Final_HEAT_EQUATION/        # este repositorio (entrega personal)
+├── README.md                             # este archivo
+├── HPC-Proyecto-2026I-1.pdf              # enunciado del proyecto (Canvas)
+├── Informe_Parcial.tex / .pdf            # informe consolidado (15 páginas)
+├── Informe_Parcial.{aux,fls,log,...}     # artefactos de compilación LaTeX
+├── img/                                  # figuras usadas en Informe_Parcial.tex
+└── Archivos_proyecto_parcial/
+    └── ahpc-heat-equation/               # copia del repo del equipo (hugoangeles0810)
+        ├── README.md                     # overview, uso, resultados, referencias, equipo
+        ├── assignment.pdf                # enunciado del proyecto (igual al de Canvas)
+        ├── Makefile                      # make → bin/heat-big, bin/heat-mpi-big
+        ├── src/
+        │   ├── heat-big.c                # solver serial
+        │   └── heat-mpi-big.c            # solver MPI (dominio 2D + halos)
+        ├── scripts/
+        │   ├── run_local.sh              # smoke test local
+        │   ├── benchmark.slurm           # barrido p×n en Khipu (SLURM)
+        │   └── collect_results.sh        # parsea salida del solver -> CSV
+        ├── analysis/
+        │   ├── plot_performance.py       # CSV -> tiempo/speedup/eficiencia/iteraciones
+        │   └── requirements.txt
+        ├── results/
+        │   ├── EXPERIMENTS.md            # bitácora de experimentos
+        │   ├── exp01-1node-16core/       # CSV + 4 figuras
+        │   └── exp02-2node-8core/        # CSV + 4 figuras
+        └── docs/
+            ├── heat-equation.md          # guía didáctica (física -> código)
+            ├── pram-y-complejidad.md     # objetivo (a): PRAM + complejidad (espejo de Informe_Parcial.tex §4)
+            ├── generate_figures.py       # genera las figuras de heat-equation.md
+            └── img/                      # figuras generadas
 ```
 
 ---
@@ -306,14 +317,14 @@ Ordenados por prioridad:
    en la Tabla "Participación del equipo" de `Informe_Parcial.tex`.
 
 2. ✅ **Completado — informe parcial armado como documento único.**
-   `Informe_Parcial.tex` (→ `Informe_Parcial.pdf`, 20 páginas) cubre exactamente las
+   `Informe_Parcial.tex` (→ `Informe_Parcial.pdf`, 15 páginas) cubre exactamente las
    secciones que pide 7.1:
    - Nombre del proyecto + integrantes
    - % de participación
    - Introducción
    - Método = PRAM + métricas (basado en `docs/pram-y-complejidad.md`)
    - Resultados preliminares (exp01/exp02)
-   - Bibliografía (10+ referencias) + nota de uso de IA
+   - Bibliografía (7 referencias) + nota de uso de IA
 
 3. ✅ **Documentado como limitación conocida — `itmax=20000` vs. convergencia.** En
    **ambos** experimentos, `iterations = 20001` para **todas** las combinaciones de `n`
@@ -334,7 +345,7 @@ Ordenados por prioridad:
    "PRAM → predicción → experimento → validación" de forma muy convincente.
 
 5. **🔴 Pendiente — subir el PDF a Canvas.** `Informe_Parcial.pdf` ya está generado
-   (20 páginas); falta subirlo + link al repo a Canvas (Proyecto HPC), como exige la
+   (15 páginas); falta subirlo + link al repo a Canvas (Proyecto HPC), como exige la
    sección 7 del enunciado.
 
 ---
@@ -364,12 +375,13 @@ No bloquean la entrega parcial, pero conviene tenerlos en el radar:
 ## 9. Cómo correr/reproducir lo que ya existe
 
 ```bash
-# Local (smoke test)
+# Local (smoke test) — desde este repo
+cd Archivos_proyecto_parcial/ahpc-heat-equation
 make                      # compila bin/heat-big y bin/heat-mpi-big
 scripts/run_local.sh 4    # corre el solver MPI con 4 procesos
 python analysis/plot_performance.py   # genera gráficas desde results/benchmark.csv
 
-# En Khipu (UTEC)
+# En Khipu (UTEC) — usando el repo del equipo directamente
 ssh <usuario>@khipu.utec.edu.pe
 git clone git@github.com:hugoangeles0810/ahpc-heat-equation.git
 cd ahpc-heat-equation
@@ -390,12 +402,12 @@ squeue --me
 | ¿Hay mediciones reales (objetivo b)? | ✅ Sí, 2 experimentos en Khipu, barrido p×n completo |
 | ¿Hay gráficas/análisis (objetivo c)? | ✅ Sí, 4 gráficas por experimento (tiempo, speedup, eficiencia, iteraciones) |
 | ¿Está validada la teoría `T=Θ(n²)`? | ⚠️ No todavía — `itmax=20000` corta antes de converger en todas las corridas; documentado como limitación conocida en el informe |
-| ¿Está el informe parcial (PDF, formato 7.1)? | ✅ Sí — `Informe_Parcial.pdf` (20 páginas), consolidado |
+| ¿Está el informe parcial (PDF, formato 7.1)? | ✅ Sí — `Informe_Parcial.pdf` (15 páginas), consolidado |
 | ¿Está definido el % de participación? | ✅ Sí — 100% para los 4 integrantes |
 | ¿Bibliografía y uso de IA documentados? | ✅ Sí, con justificación explícita |
 
 **En síntesis:** la entrega parcial está **completa y lista para enviar** — código,
 PRAM, experimentos, gráficas, % de participación e informe consolidado
-(`Informe_Parcial.pdf`, 20 páginas). Solo queda **subir el PDF a Canvas**. La validación
+(`Informe_Parcial.pdf`, 15 páginas). Solo queda **subir el PDF a Canvas**. La validación
 experimental de `T=Θ(n²)` queda documentada como limitación conocida y como trabajo
 pendiente para la entrega final (§8).
